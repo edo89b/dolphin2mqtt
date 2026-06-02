@@ -1,0 +1,19 @@
+services:
+  dolphin2mqtt:
+    build: .
+    container_name: dolphin2mqtt
+    restart: always
+    env_file: .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      macvlan00_server:
+        ipv4_address: ${DOLPHIN_IPV4}
+        ipv6_address: ${DOLPHIN_IPV6}
+
+networks:
+  macvlan00_server:
+    external: true
