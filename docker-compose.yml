@@ -10,10 +10,10 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      macvlan00_server:
-        ipv4_address: ${DOLPHIN_IPV4}
-        ipv6_address: ${DOLPHIN_IPV6}
+      # Internal bridge shared with the broker (reached by name `mqtt`). Pure outbound
+      # client: egress to the Dolphin cloud goes out via the host IP (NAT), no LAN IP.
+      - mqtt_net
 
 networks:
-  macvlan00_server:
+  mqtt_net:
     external: true
