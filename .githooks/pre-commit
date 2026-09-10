@@ -1,0 +1,5 @@
+#!/bin/sh
+# Blocks the commit when the reference documentation cites something that no
+# longer exists (see scripts/doc_check.py).
+# Enable once per clone: git config core.hooksPath .githooks
+exec python3 "$(git rev-parse --show-toplevel)/scripts/doc_check.py"
