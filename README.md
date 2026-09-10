@@ -21,10 +21,17 @@ cp .env.example .env
 | `CREDENTIALS_REFRESH_SECS` | AWS STS credentials refresh interval |
 | `LOG_LEVEL` | `INFO`, `DEBUG`, ... |
 
-The provided `docker-compose.yml` attaches the container to an external macvlan
-network with a static IP. If you don't use macvlan, remove the `networks:`
-blocks (and the `DOLPHIN_IPV4` / `DOLPHIN_IPV6` variables) to use default bridge
-networking.
+The provided `docker-compose.yml` attaches the container to `mqtt_net`, an
+existing external Docker network shared with the broker. The bridge is an
+outbound-only client and gets no LAN IP of its own: it reaches the broker by
+its container name or alias on that network (put it in `MQTT_HOST`, default
+`mosquitto`) and the Maytronics cloud through the host's address (NAT), so the
+network must be a regular bridge, not an `--internal` one. Create it once with
+`docker network create mqtt_net` and attach the broker container to it. If your
+broker is reachable some other way, replace the `networks:` blocks with the
+default bridge network and point `MQTT_HOST` at the broker's address.
+`DOLPHIN_IPV4` / `DOLPHIN_IPV6`, still listed in `.env.example`, are leftovers
+of an earlier macvlan setup: nothing reads them.
 
 ## Registering an account usable by the bridge
 
